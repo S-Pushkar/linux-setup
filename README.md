@@ -1,3 +1,3 @@
 # Installation
 
-```sudo ./setup.bash```
+```./setup.bash```
