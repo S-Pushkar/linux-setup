@@ -1,12 +1,15 @@
 #!/bin/bash
 
-distro=$(lsb_release -si)
+# distro=$(lsb_release -si)
+OS=$(grep '^ID=' /etc/os-release | cut -d'=' -f2)
+
 FONT_DIR="$HOME/.local/share/fonts"
 FONT_NAME="MesloLGS NF Regular.ttf"
 FONT_URL="https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Regular.ttf"
 NEW_PLUGINS="plugins=(git zsh-autosuggestions zsh-syntax-highlighting fast-syntax-highlighting)"
 
-if [ $distro == "Fedora" ]; then
+# if [ $distro == "Fedora" ]; then
+if [ $OS == "fedora" ]; then
     sudo dnf update -y
     sudo dnf install -y zsh neovim gh
 else
