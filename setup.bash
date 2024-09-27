@@ -1,6 +1,5 @@
 #!/bin/bash
 
-# distro=$(lsb_release -si)
 OS=$(grep '^ID=' /etc/os-release | cut -d'=' -f2)
 
 FONT_DIR="$HOME/.local/share/fonts"
@@ -8,7 +7,6 @@ FONT_NAME="MesloLGS NF Regular.ttf"
 FONT_URL="https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Regular.ttf"
 NEW_PLUGINS="plugins=(git zsh-autosuggestions zsh-syntax-highlighting fast-syntax-highlighting)"
 
-# if [ $distro == "Fedora" ]; then
 if [ $OS == "fedora" ]; then
     sudo dnf update -y
     sudo dnf install -y zsh neovim gh
@@ -32,8 +30,6 @@ else
     echo "No default profile found"
 fi
 
-# chsh -s $(which zsh)
-
 git clone https://github.com/S-Pushkar/nvim-configs.git ~/.config/nvim
 
 # sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
@@ -53,11 +49,10 @@ git clone https://github.com/zsh-users/zsh-autosuggestions.git $ZSH_CUSTOM/plugi
 git clone https://github.com/zsh-users/zsh-syntax-highlighting.git $ZSH_CUSTOM/plugins/zsh-syntax-highlighting
 git clone https://github.com/zdharma-continuum/fast-syntax-highlighting.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/fast-syntax-highlighting
 
-gh auth login
-# p10k configure
-
 if grep -q "^plugins=" "$HOME/.zshrc"; then
     sed -i "s/^plugins=.*/$NEW_PLUGINS/" "$HOME/.zshrc"
 else
     echo "$NEW_PLUGINS" >> "$HOME/.zshrc"
 fi
+
+gh auth login
