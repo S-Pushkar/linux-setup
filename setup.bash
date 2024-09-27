@@ -32,11 +32,13 @@ else
     echo "No default profile found"
 fi
 
-chsh -s $(which zsh)
+# chsh -s $(which zsh)
 
 git clone https://github.com/S-Pushkar/nvim-configs.git ~/.config/nvim
 
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+# sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+wget https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh
+sh install.sh
 
 git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
 
