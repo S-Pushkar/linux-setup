@@ -11,13 +11,17 @@ if [ $distro == "Fedora" ]; then
     sudo dnf install -y zsh neovim gh
 else
     sudo apt update -y
-    sudo apt install -y zsh neovim gh
+    sudo apt install -y zsh neovim gh wget curl
 fi
+
+mkdir -p "$FONT_DIR"
 
 wget -O "$FONT_DIR/$FONT_NAME" "$FONT_URL" || curl -o "$FONT_DIR/$FONT_NAME" "$FONT_URL"
 fc-cache -f -v
 
 PROFILE=$(gsettings get org.gnome.Terminal.ProfilesList default | tr -d \')
+
+gsettings set org.gnome.desktop.interface monospace-font-name 'MesloLGS NF Regular 12'
 
 if [ -n "$PROFILE" ]; then
     gsettings set "org.gnome.Terminal.Legacy.Profile:/org/gnome/Terminal/Legacy/Profiles:/:$PROFILE/" font 'MesloLGS NF Regular 12'
@@ -37,11 +41,11 @@ git clone https://github.com/zsh-users/zsh-autosuggestions.git $ZSH_CUSTOM/plugi
 git clone https://github.com/zsh-users/zsh-syntax-highlighting.git $ZSH_CUSTOM/plugins/zsh-syntax-highlighting
 git clone https://github.com/zdharma-continuum/fast-syntax-highlighting.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/fast-syntax-highlighting
 
+gh auth login
+p10k configure
+
 if grep -q "^plugins=" "$HOME/.zshrc"; then
     sed -i "s/^plugins=.*/$NEW_PLUGINS/" "$HOME/.zshrc"
 else
     echo "$NEW_PLUGINS" >> "$HOME/.zshrc"
 fi
-
-gh auth login
-p10k configure
