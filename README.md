@@ -1,0 +1,3 @@
+# Installation
+
+```sudo ./setup.bash```
