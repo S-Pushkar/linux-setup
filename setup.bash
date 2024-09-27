@@ -54,7 +54,7 @@ git clone https://github.com/zsh-users/zsh-syntax-highlighting.git $ZSH_CUSTOM/p
 git clone https://github.com/zdharma-continuum/fast-syntax-highlighting.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/fast-syntax-highlighting
 
 gh auth login
-p10k configure
+# p10k configure
 
 if grep -q "^plugins=" "$HOME/.zshrc"; then
     sed -i "s/^plugins=.*/$NEW_PLUGINS/" "$HOME/.zshrc"
