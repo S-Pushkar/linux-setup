@@ -42,7 +42,12 @@ sh install.sh
 
 git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
 
-echo 'ZSH_THEME="powerlevel10k/powerlevel10k"' >> ~/.zshrc
+# echo 'ZSH_THEME="powerlevel10k/powerlevel10k"' >> ~/.zshrc
+if grep -q "^ZSH_THEME=" "$HOME/.zshrc"; then
+    sed -i "s/^ZSH_THEME=.*/ZSH_THEME=\"powerlevel10k\/powerlevel10k\"/" "$HOME/.zshrc"
+else
+    echo 'ZSH_THEME="powerlevel10k/powerlevel10k"' >> "$HOME/.zshrc"
+fi
 
 git clone https://github.com/zsh-users/zsh-autosuggestions.git $ZSH_CUSTOM/plugins/zsh-autosuggestions
 git clone https://github.com/zsh-users/zsh-syntax-highlighting.git $ZSH_CUSTOM/plugins/zsh-syntax-highlighting
