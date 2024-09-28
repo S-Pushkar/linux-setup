@@ -1,3 +1,13 @@
+# Information
+
+This repository provides a shell script to install and configure the following:
+- Neovim
+- Zsh
+- MesloLGS NF font for the terminal
+- Oh-My-Zsh
+- Powerlevel10k
+- gh (To instantly start using git)
+
 # Installation
 
 ```./setup.bash```
