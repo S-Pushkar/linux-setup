@@ -35,6 +35,7 @@ git clone https://github.com/S-Pushkar/nvim-configs.git ~/.config/nvim
 # sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 wget https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh
 sh install.sh
+# Type exit when the zsh shell opens, otherwise the rest of the script won't be executed
 
 git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
 
