@@ -1,12 +1,14 @@
 # Information
 
-This repository provides a shell script to install and configure the following:
-- Neovim
-- Zsh
-- MesloLGS NF font for the terminal
-- Oh-My-Zsh
-- Powerlevel10k
-- gh (To instantly start using git)
+- This repository provides a shell script to install and configure the following in Fedora or Ubuntu(Debian based):
+    - Neovim
+    - Zsh
+    - MesloLGS NF font for the terminal
+    - Oh-My-Zsh
+    - Powerlevel10k
+    - gh (To instantly start using git)
+
+- If you want to use this script in a distribution which does not use ```dnf``` or ```apt``` package manager, change the script as needed.
 
 # Installation
 
