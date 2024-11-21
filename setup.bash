@@ -10,6 +10,9 @@ NEW_PLUGINS="plugins=(git zsh-autosuggestions zsh-syntax-highlighting fast-synta
 if [ $OS == "fedora" ]; then
     sudo dnf update -y
     sudo dnf install -y zsh neovim gh
+elif [ $OS == "arch" ]; then
+    sudo pacman -Syu
+    sudo pacman -S zsh neovim github-cli wget curl
 else
     sudo apt update -y
     sudo apt install -y zsh neovim gh wget curl
