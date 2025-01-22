@@ -9,14 +9,21 @@ NEW_PLUGINS="plugins=(git zsh-autosuggestions zsh-syntax-highlighting fast-synta
 
 if [ $OS == "fedora" ]; then
     sudo dnf update -y
-    sudo dnf install -y zsh neovim gh
+    sudo dnf install -y zsh neovim gh ruby-devel gcc make
 elif [ $OS == "arch" ]; then
     sudo pacman -Syu
-    sudo pacman -S zsh neovim github-cli wget curl
+    sudo pacman -S zsh neovim github-cli wget curl ruby
 else
     sudo apt update -y
-    sudo apt install -y zsh neovim gh wget curl
+    sudo apt install -y zsh neovim gh wget curl ruby-full
 fi
+
+gem install colorls
+
+source $(dirname $(gem which colorls))/tab_complete.sh
+
+echo "alias ls=colorls" >> ~/.zshrc
+echo "alias ls=colorls" >> ~/.bashrc
 
 mkdir -p "$FONT_DIR"
 
