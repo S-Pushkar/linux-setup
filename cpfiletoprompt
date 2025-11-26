@@ -1,0 +1,98 @@
+#!/usr/bin/env bash
+
+# Exit if no arguments are provided
+if [ $# -eq 0 ]; then
+  echo "Usage: $0 <file_or_dir1> [file_or_dir2] ..." >&2
+  echo "Recursively copies the full path and content of specified files to the clipboard." >&2
+  exit 1
+fi
+
+# --- Auto-detect clipboard utility ---
+if command -v pbcopy >/dev/null 2>&1; then
+  CLIP_CMD="pbcopy"
+elif command -v xclip >/dev/null 2>&1; then
+  CLIP_CMD="xclip -selection clipboard"
+elif command -v wl-copy >/dev/null 2>&1; then
+  CLIP_CMD="wl-copy"
+elif command -v clip.exe >/dev/null 2>&1; then
+  # For Windows Subsystem for Linux (WSL)
+  CLIP_CMD="clip.exe"
+else
+  echo "Error: No clipboard utility (pbcopy, xclip, wl-copy, clip.exe) found." >&2
+  exit 1
+fi
+
+# --- Helper Function ---
+# This function formats and prints a single file's path and content.
+# It reads and modifies 'is_first_file' from the main block's scope.
+# $1: file_path
+process_file() {
+  local file_path="$1"
+  local abs_path
+
+  # Check for readability
+  if [ ! -r "$file_path" ]; then
+    echo "Warning: Skipping unreadable file: $file_path" >&2
+    return
+  fi
+
+  # Determine the command for getting the absolute path
+  # 'greadlink' is for macOS (requires: brew install coreutils)
+  # 'readlink' is for standard Linux
+  if command -v greadlink >/dev/null 2>&1; then
+    abs_path=$(greadlink -f "$file_path")
+  elif command -v readlink >/dev/null 2>&1; then
+    abs_path=$(readlink -f "$file_path")
+  else
+    # Fallback if readlink isn't available
+    abs_path="$file_path"
+  fi
+
+  # Add a blank line *between* file entries
+  if [ "$is_first_file" = true ]; then
+    is_first_file=false
+  else
+    echo "" # Print a separator newline
+  fi
+
+  # Print the formatted output
+  echo "$abs_path:"
+  echo "" # Add a blank line after the path
+  cat "$file_path"
+}
+
+# --- Process files and directories ---
+# We group all output from the loop (inside '{...}')
+# and pipe it *once* to the clipboard command for efficiency.
+{
+  # This flag is shared by the main loop and the process_file function
+  is_first_file=true
+
+  for arg in "$@"; do
+    if [ -d "$arg" ]; then
+      # It's a directory.
+      # Check if we can read/enter it
+      if [ ! -r "$arg" ] || [ ! -x "$arg" ]; then
+        echo "Warning: Skipping unreadable/inaccessible directory: $arg" >&2
+        continue # Skip to the next argument
+      fi
+
+      # Find all readable files recursively and process them.
+      # We use 'while read ... < <(find ...)' so that the 'while' loop
+      # runs in the *current* shell, allowing it to modify 'is_first_file'.
+      while IFS= read -r -d '' file; do
+        process_file "$file"
+      done < <(find "$arg" -type f -readable -print0)
+
+    elif [ -f "$arg" ]; then
+      # It's a regular file. Let the function handle readability checks.
+      process_file "$arg"
+
+    else
+      # Print errors to stderr (the console) so they don't go to the clipboard
+      echo "Warning: Argument not found or is not a file/directory: $arg" >&2
+    fi
+  done
+} | $CLIP_CMD
+
+echo "Copied contents to clipboard."
